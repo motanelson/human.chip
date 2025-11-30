@@ -5924,15 +5924,13 @@ static inline void outportb(unsigned short port, unsigned char value)
     outportb(VGA_SEQ_DATA, p);
 }
 void ppixel(int x, int y){
-    int xx = x / 8;
-    int bit = 7 - (x & 7);
-    if (x >= 0 && y >= 0 && x < 640 && y < 480){
-        unsigned int location = (y * 80) + xx;
-        unsigned char mask = 1 << bit;
-        unsigned char color = *(fbp + location);
-        color |= mask;
-        *(fbp + location) = color;
-    }
+    if (x < 0 || y < 0 || x >= 640 || y >= 480) return;
+
+    int byte_offset = (y * 80) + (x >> 3);
+    unsigned char mask = 0x80 >> (x & 7); // bit mais à esquerda = pixel mais pequeno
+    unsigned char color = fbp[byte_offset];
+    color &= ~mask;  // apaga (preto)
+    fbp[byte_offset] = color;
 }
 void cls(){
     int a=0;

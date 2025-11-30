@@ -9,7 +9,7 @@ void kernel_main()
         int ii=0;
         char c=Yellow;
         char Black=0;
-	//cls();
+	cls();
         
 
              for(xx=1;xx<310;xx++){
